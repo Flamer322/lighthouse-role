@@ -1,0 +1,20 @@
+---
+- name: Install LightHouse dependencies
+  ansible.builtin.apt:
+    name: "{{ lighthouse_dependencies }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Download LightHouse repository
+  ansible.builtin.git:
+    repo: "{{ lighthouse_repository }}"
+    dest: "{{ lighthouse_directory }}"
+    version: "{{ lighthouse_version }}"
+    update: true
+
+- name: Generate Nginx configuration
+  ansible.builtin.template:
+    src: lighthouse.conf.j2
+    dest: "{{ lighthouse_nginx_config }}"
+    mode: "0644"
